@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useContext } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Context } from "../../App";
@@ -33,16 +34,25 @@ const Navlinks = () => {
     };
   }, []);
 
+  useEffect(() => {
+    if (!menuOpen) {
+      document.body.style.overflow = "auto"; // Ensure body scroll is enabled when menu is closed
+    } else {
+      document.body.style.overflow = "hidden"; // Prevent body scroll when menu is open
+    }
+  }, [menuOpen]);
+
   return (
     <AppBar
       position="static"
       sx={{
-        background: 'linear-gradient(to right, #6D28D9, #3B82F6)', // Gradient background
+        background: 'linear-gradient(to right, #6D28D9, #3B82F6)', // Gradient background for navbar
         paddingBottom: 0,
         paddingX: 2, // Adjust padding
+        zIndex: 1200, // Ensure it appears above other content
       }}
     >
-      <Toolbar sx={{ paddingX: 2, justifyContent: 'space-between' }}> {/* Ensure even padding and right alignment */}
+      <Toolbar sx={{ paddingX: 2, justifyContent: 'space-between' }}>
         {/* Mobile Menu Button */}
         <IconButton
           size="large"
@@ -113,13 +123,14 @@ const Navlinks = () => {
           display: { xs: menuOpen ? 'flex' : 'none', lg: 'none' },
           flexDirection: 'column',
           alignItems: 'center',
-          position: 'absolute',
-          top: 64,
+          position: 'fixed', // Change to fixed positioning
+          top: 0, // Align to the top
           left: 0,
           width: '100%',
-          backgroundColor: 'rgba(255, 255, 255, 0.8)',
-          height: 'calc(100vh - 64px)',
-          zIndex: 1300, // Ensure it appears above other content
+          backgroundColor: 'rgba(255, 255, 255, 0.9)', // Slightly less transparent
+          height: '100vh', // Full viewport height
+          zIndex: 1100, // Ensure it appears below the navbar but above content
+          overflowY: 'auto', // Ensure scrolling within the menu if needed
         }}
       >
         {navitems.map((data, index) => (
@@ -136,6 +147,7 @@ const Navlinks = () => {
                 color: '#2563EB',
               },
             }}
+            onClick={() => setMenuOpen(false)} // Close the menu on item click
           >
             {data.name}
           </Button>
@@ -163,4 +175,3 @@ const Navlinks = () => {
 };
 
 export default Navlinks;
-

@@ -8,6 +8,7 @@ import {
   Grid,
   TextField,
   Typography,
+  Box
 } from "@mui/material";
 import Swal from "sweetalert2";
 import { Context } from "../../App";
@@ -15,8 +16,9 @@ import { Context } from "../../App";
 const Products = () => {
   const { cartData, productsData } = useContext(Context);
   const [apiData, setapiData] = useState(null);
+
   const filterData = (e) => {
-    let filterapiData = productsData.filter((val, ind) => {
+    let filterapiData = productsData.filter((val) => {
       return val.title.toLowerCase().includes(e.target.value.toLowerCase());
     });
     setapiData(filterapiData);
@@ -30,7 +32,7 @@ const Products = () => {
     let storage = localStorage.getItem("addToCart");
     if (storage) {
       let allData = JSON.parse(storage);
-      let isRepeated = allData.find((val, index) => {
+      let isRepeated = allData.find((val) => {
         return val.title.toLowerCase().includes(e.title.toLowerCase());
       });
       if (isRepeated) {
@@ -59,18 +61,53 @@ const Products = () => {
       let counting = JSON.parse(localStorage.getItem("addToCart"));
       cartData(counting.length);
     }
-    // console.log(e);
   };
 
   return (
     <>
-      <Grid my={4}>
-        <TextField
-          variant="filled"
-          label="search items"
-          type="text"
-          onChange={filterData}
-        />
+      <Grid container justifyContent="center" my={4}>
+        <Box
+          sx={{
+            width: '50%', // Adjust width as needed
+            maxWidth: 600,
+            borderRadius: 2, // More rounded corners
+            backgroundColor: '#ffffff', // Background color matching header
+            '& .MuiOutlinedInput-root': {
+              borderRadius: 2, // Match border radius of the Box
+              '& fieldset': {
+                borderColor: '#6D28D9', // Purple border color
+              },
+              '&:hover fieldset': {
+                borderColor: '#6D28D9', // Purple border color on hover
+              },
+            },
+            '& .MuiInputBase-input': {
+              color: '#000000', // Text color
+            },
+            '& .MuiInputLabel-root': {
+              color: '#000000', // Label color
+            },
+            '& .MuiInputBase-input::placeholder': {
+              color: '#6D28D9', // Purple placeholder color
+            },
+          }}
+        >
+          <TextField
+            variant="outlined"
+            fullWidth
+            label="Search items"
+            type="text"
+            onChange={filterData}
+            sx={{
+              '& .MuiInputLabel-root': {
+                color: '#000000', // Label color
+              },
+              '& .MuiInputBase-input': {
+                padding: '12px 14px', // Padding for better appearance
+              }
+            }}
+          />
+        </Box>
       </Grid>
 
       <Grid container mt={5} columnSpacing={4} rowSpacing={4}>
@@ -81,7 +118,7 @@ const Products = () => {
                 <Card sx={{ maxWidth: 345 }}>
                   <CardMedia
                     component="img"
-                    alt="green iguana"
+                    alt={data.title}
                     height="140"
                     image={data.thumbnail}
                   />
